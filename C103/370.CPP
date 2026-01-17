@@ -31,16 +31,20 @@ int main() {
     int ptr[100005];
 
     for(int i = 0;i < 100005;i++){
-        ptr[i] = -15;
+        ptr[i] = -10;
     }
 
-    for(int i = 0;i < n;i++){
-        for(int j = 0;j < rooms;j++){
-            if(t[i].st >= ptr[j]+10){
+    for(int i = 0; i < n; i++){
+        bool ok = false;
+        for(int j = 0; j <= rooms; j++){ // 遍历所有教室
+            if(t[i].st >= ptr[j] + 10){
                 ptr[j] = t[i].ed;
-            }else{
-                ++rooms;
+                ok = true;
+                break; // 找到后退出
             }
+        }
+        if(!ok){
+            ptr[++rooms] = t[i].ed; //新增教室，记录结束时间
         }
     }
     cout<<rooms;
