@@ -1,33 +1,60 @@
-#include<bits/stdc++.h>
+#include <iostream>
+#include <queue>
 using namespace std;
+
+const int MAX_N = 10005;
+
 int main() {
     int n;
-    cin>>n;
-    vector<vector<int>> g(n + 1);
+    cin >> n;
+    int head[MAX_N];
+    int nxt[MAX_N * 2];
+    int to[MAX_N * 2];
+    int cnt = 0;
+    for(int i = 0; i <= n; i++) {
+        head[i] = -1;
+    }
+    
     for (int i = 0; i < n - 1; i++) {
         int u, v;
-        cin>>u>>v;
-        g[u].push_back(v);
-        g[v].push_back(u);
+        cin >> u >> v;
+        to[cnt] = v;
+        nxt[cnt] = head[u];
+        head[u] = cnt++;
+        to[cnt] = u;
+        nxt[cnt] = head[v];
+        head[v] = cnt++;
     }
-    vector<int> d(n + 1, -1);
+    
+    int dist[MAX_N];
+    bool vis[MAX_N];
+    for(int i = 0; i <= n; i++) {
+        dist[i] = -1;
+        vis[i] = false;
+    }
+    
     queue<int> q;
     q.push(1);
-    d[1] = 1;
+    dist[1] = 1;
+    vis[1] = true;
+    
     while (!q.empty()) {
         int node = q.front();
         q.pop();
-        for (int nbr : g[node]) {
-            if (d[nbr] == -1) {
-                d[nbr] = d[node] + 1;
-                q.push(nbr);
+        for(int e = head[node]; e != -1; e = nxt[e]) {
+            int neighbor = to[e];
+            if (!vis[neighbor]) {
+                dist[neighbor] = dist[node] + 1;
+                vis[neighbor] = true;
+                q.push(neighbor);
             }
         }
     }
     for (int i = 1; i <= n; i++) {
-        cout<<d[i];
-        if (i != n) cout<<" ";
+        cout << dist[i];
+        if (i != n) cout << " ";
     }
-    cout<<endl;
+    cout << endl;
+    
     return 0;
 }
