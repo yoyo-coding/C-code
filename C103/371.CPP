@@ -1,26 +1,67 @@
 #include<bits/stdc++.h>
 using namespace std;
-#define ll long long
-int n,m;
-struct node{
-    int st;
-    int ed;
-}t[100005];
-bool cmp(const node& a,const node& b){
-    return a.st < b.st || 
+
+struct node {
+    int pos, radius;
+    int left, right;
+};
+
+bool cmp(const node &a, const node &b) {
+    if (a.left != b.left) return a.left < b.left;
+    return a.right > b.right;
 }
 
 int main() {
-    cin>>n>>m;
-    for(int i = 0;i < m;i++){
-        cin>>t[i].st>>t[i].ed;
+    int L, m;
+    cin>>L>>m;
+    
+    node towers[10005];
+    for (int i = 0; i < m; i++) {
+        cin>>towers[i].pos>>towers[i].radius;
+        towers[i].left = towers[i].pos - towers[i].radius;
+        towers[i].right = towers[i].pos + towers[i].radius;
     }
-    sort(t,t+m,cmp);
-    int s = 1,t = 100,cnt = 0;
-    for(int i = 0;i < n && s < t;i++){
-        for(int j = i;j < m;j++){
-            if()
+    
+    sort(towers, towers + m, cmp);
+    
+    if (m == 0 || towers[0].left > 0) {
+        return 0;
+    }
+    
+    int ptr = 0;
+    int cnt = 0;
+    int i = 0;
+    
+    while (ptr < L && i < m) {
+        if (towers[i].left > ptr) {
+            cout<<"Impossible"<<endl;
+            return 0;
         }
+        
+        int max_right = ptr;
+        while (i < m && towers[i].left <= ptr) {
+            if (towers[i].right > max_right) {
+                max_right = towers[i].right;
+            }
+            i++;
+        }
+        
+        if (max_right <= ptr) {
+            cout<<"Impossible"<<endl;
+            return 0;
+        }
+        
+        ptr = max_right;
+        cnt++;                  
+        
+        i--;
     }
+    
+    if (ptr >= L) {
+        cout<<cnt<<endl;
+    } else {
+        cout<<"Impossible"<<endl;
+    }
+    
     return 0;
 }
