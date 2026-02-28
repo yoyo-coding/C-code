@@ -2,6 +2,8 @@
 using namespace std;
 #define ll long long
 int main(){
+    freopen("explore.in","r",stdin);
+    freopen("explore.out","w",stdout);
     int n, q, s, t;
     cin>>n>>q>>s>>t;
     
